@@ -16,8 +16,9 @@ export class UsersRepository {
   findUserBy(key: string, value: string): Promise<User> {
     return this.userRepo.findOne({ [key]: value }).exec();
   }
-  createUser(data: CreateUserDto): Promise<User> {
-    return this.userRepo.create(data);
+  async createUser(data: CreateUserDto): Promise<User> {
+    const user = await this.userRepo.create(data);
+    return user.toObject();
   }
   deleteUser(id: string | Types.ObjectId) {
     return this.userRepo.deleteOne({ _id: id });

@@ -44,4 +44,12 @@ export class UsersService {
     await this.userRepo.deleteUser(id);
     return id;
   }
+
+  async findUserByName(name: string) {
+    const user = await this.userRepo.findUserBy('name', name);
+    if (!user) {
+      throw new NotFoundException(ErrorMessages.USER_NOT_FOUND);
+    }
+    return user;
+  }
 }

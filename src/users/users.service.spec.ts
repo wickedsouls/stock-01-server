@@ -76,6 +76,11 @@ describe('UsersService', () => {
       expect(user).toBeDefined();
       expect(user.name).toBe(userStub().name);
     });
+    it('should find user by name', async () => {
+      await userModel.create(userStub());
+      const user = await service.findUserByName(userStub().name);
+      expect(user.name).toBe(userStub().name);
+    });
     it('should throw error on invalid id', async () => {
       expect(() => service.findUserById('123')).toThrow(
         ErrorMessages.INVALID_ID,

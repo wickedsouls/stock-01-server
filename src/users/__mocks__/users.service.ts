@@ -5,4 +5,5 @@ export const UsersService = jest.fn().mockReturnValue({
   findUserById: jest.fn().mockResolvedValue(userStub()),
   deleteUser: jest.fn().mockResolvedValue('123'),
   findAllUsers: jest.fn().mockResolvedValue([userStub()]),
+  findUserByName: jest.fn().mockResolvedValue(userStub()),
 });

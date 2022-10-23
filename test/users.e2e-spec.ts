@@ -22,13 +22,13 @@ describe('Users (e2e)', () => {
   });
 
   it('create, read, delete user flow', async () => {
-    let res = await request(app.getHttpServer())
+    let res: request.Response;
+
+    res = await request(app.getHttpServer())
       .post('/users')
       .send(userStub())
       .expect(201);
-
     let user = res.body;
-
     expect(user).toBeDefined();
     expect(user.name).toBe(userStub().name);
 

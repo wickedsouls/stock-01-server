@@ -28,6 +28,10 @@ describe('UsersController', () => {
     expect(user).toBeDefined();
     expect(user.name).toEqual(userStub().name);
   });
+  it('should call find user by name', async () => {
+    const user = await controller.findUserByName(userStub().name);
+    expect(user).toBeDefined();
+  });
   it('should call delete user', async () => {
     const id = await controller.deleteUser('123');
     expect(id).toBe('123');
