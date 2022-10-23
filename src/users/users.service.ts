@@ -7,6 +7,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersRepository } from './users.repository';
 import { ErrorMessages } from '../constants/errorMessages';
 import { ValidateMongoId } from '../decorators/validateMongoId';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class UsersService {
@@ -20,12 +21,13 @@ export class UsersService {
     }
     return this.userRepo.createUser(createUserDto);
   }
-  getAllUsers() {
+
+  findAllUsers() {
     return this.userRepo.findAllUsers();
   }
 
   @ValidateMongoId()
-  async findUserById(id: string) {
+  async findUserById(id: Types.ObjectId | string) {
     const user = await this.userRepo.findUserById(id);
     if (!user) {
       throw new NotFoundException(ErrorMessages.USER_NOT_FOUND);
@@ -34,7 +36,7 @@ export class UsersService {
   }
 
   @ValidateMongoId()
-  async deleteUser(id: string) {
+  async deleteUser(id: Types.ObjectId | string) {
     const user = await this.userRepo.findUserById(id);
     if (!user) {
       throw new NotFoundException(ErrorMessages.USER_NOT_FOUND);
