@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
+import { DatabaseProduction } from './db/DatabaseProduction';
+import { DatabaseTest } from './db/DatabaseTest';
+import { isTestEnv } from './utils/environment';
 
 @Module({
-  imports: [UsersModule],
-  controllers: [AppController, UsersController],
-  providers: [AppService],
+  imports: [UsersModule, isTestEnv ? DatabaseTest : DatabaseProduction],
 })
 export class AppModule {}
