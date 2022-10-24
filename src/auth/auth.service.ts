@@ -1,8 +1,7 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { AuthDto } from './dtos/auth.dto';
-import { ErrorMessages } from '../constants/errorMessages';
 import { UserRole } from '../constants/users';
 import { PasswordEncryptionService } from './password-encryption.service';
 
