@@ -12,13 +12,13 @@ export class ProductRepository {
     private readonly productRepo: Model<Product>,
   ) {}
 
-  getAllProducts(): Promise<ProductDocument[]> {
+  findAllProducts(): Promise<ProductDocument[]> {
     return this.productRepo.find({}).exec();
   }
-  getProductById(id: MongoIdOrString): Promise<ProductDocument | null> {
+  findProductById(id: MongoIdOrString): Promise<ProductDocument | null> {
     return this.productRepo.findById(id).exec();
   }
-  getProductBy(key: string, value: string): Promise<ProductDocument | null> {
+  findProductBy(key: string, value: string): Promise<ProductDocument | null> {
     return this.productRepo.findOne({ [key]: value }).exec();
   }
   createProduct(

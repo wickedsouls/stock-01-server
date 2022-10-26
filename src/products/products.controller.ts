@@ -22,8 +22,8 @@ import { UpdateProductDto, CreateProductDto, ProductDto } from './dtos';
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
   @Get('/all')
-  getAllProducts() {
-    return this.productsService.getAllProducts();
+  findAllProducts() {
+    return this.productsService.findAllProducts();
   }
   @Get('/filter')
   filterProductsBy(@Query('key') key: string, @Query('value') value: string) {
@@ -38,7 +38,7 @@ export class ProductsController {
   }
   @Get('/:id')
   findProductById(@Param('id') id: string) {
-    return this.productsService.getProductById(id);
+    return this.productsService.findProductById(id);
   }
   @Post()
   createProduct(

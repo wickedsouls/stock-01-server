@@ -14,8 +14,8 @@ import { UpdateProductDto, CreateProductDto } from './dtos';
 export class ProductsService {
   constructor(private readonly productsRepo: ProductRepository) {}
 
-  getAllProducts() {
-    return this.productsRepo.getAllProducts();
+  findAllProducts() {
+    return this.productsRepo.findAllProducts();
   }
 
   sortBy(key: string, direction: 'asc' | 'desc') {
@@ -32,7 +32,7 @@ export class ProductsService {
     createProductDto: CreateProductDto,
   ) {
     const { name } = createProductDto;
-    const product = await this.productsRepo.getProductBy('name', name);
+    const product = await this.productsRepo.findProductBy('name', name);
     if (product) {
       throw new BadRequestException(ErrorMessages.PRODUCT_ALREADY_EXISTS);
     }
@@ -41,7 +41,7 @@ export class ProductsService {
 
   @ValidateMongoId()
   async deleteProduct(productId: MongoIdOrString, userId: MongoIdOrString) {
-    const product = await this.productsRepo.getProductById(productId);
+    const product = await this.productsRepo.findProductById(productId);
     if (!product) {
       throw new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND);
     }
@@ -52,8 +52,8 @@ export class ProductsService {
   }
 
   @ValidateMongoId()
-  async getProductById(id: MongoIdOrString) {
-    const product = await this.productsRepo.getProductById(id);
+  async findProductById(id: MongoIdOrString) {
+    const product = await this.productsRepo.findProductById(id);
     if (!product) {
       throw new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND);
     }
@@ -62,7 +62,7 @@ export class ProductsService {
 
   @ValidateMongoId()
   async updateProduct(id: MongoIdOrString, data: UpdateProductDto) {
-    const product = await this.productsRepo.getProductById(id);
+    const product = await this.productsRepo.findProductById(id);
     if (!product) {
       throw new NotFoundException(ErrorMessages.PRODUCT_NOT_FOUND);
     }

@@ -9,7 +9,7 @@ import {
 } from '../schemas/product.schema';
 import { getModelToken } from '@nestjs/mongoose';
 import { ProductRepository } from './product.repository';
-import { createProductStub, productStub } from '../../test/stubs/product.stubs';
+import { createProductStub } from '../../test/stubs/product.stubs';
 import { ErrorMessages } from '../constants/errorMessages';
 
 describe('ProductsService', () => {
@@ -78,7 +78,7 @@ describe('ProductsService', () => {
   describe('get products', () => {
     it('should get all products', async () => {
       await productsModel.create({ ...createProductStub(), createdBy: id });
-      const products = await service.getAllProducts();
+      const products = await service.findAllProducts();
       expect(products.length).toBe(1);
       expect(products[0].name).toBe(createProductStub().name);
     });
@@ -87,14 +87,14 @@ describe('ProductsService', () => {
         ...createProductStub(),
         createdBy: id,
       });
-      const product = await service.getProductById(_id);
+      const product = await service.findProductById(_id);
       expect(product).toBeDefined();
       expect(product.name).toBe(createProductStub().name);
     });
     it('should throw error if product is not found', async () => {
       await productsModel.create({ ...createProductStub(), createdBy: id });
       await expect(() =>
-        service.getProductById(new Types.ObjectId()),
+        service.findProductById(new Types.ObjectId()),
       ).rejects.toThrow(ErrorMessages.PRODUCT_NOT_FOUND);
     });
     it('should sort product by', async () => {

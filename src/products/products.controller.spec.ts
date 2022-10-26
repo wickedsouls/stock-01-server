@@ -23,7 +23,7 @@ describe('ProductsController', () => {
     expect(controller).toBeDefined();
   });
   it('should call get all products service', async () => {
-    const products = await service.getAllProducts();
+    const products = await service.findAllProducts();
     expect(products.length).toBe(1);
   });
   it('should call sort products service', async () => {
@@ -43,7 +43,7 @@ describe('ProductsController', () => {
     expect(product).toBeDefined();
   });
   it('should call get product by id service', async () => {
-    const product = await service.getProductById('id');
+    const product = await service.findProductById('id');
     expect(product).toBeDefined();
   });
   it('should call delete product service', async () => {
