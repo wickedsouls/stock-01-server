@@ -88,22 +88,20 @@ describe('UsersService', () => {
     });
     it('should throw error if user is not found', async () => {
       const id = new Types.ObjectId();
-      await expect(() => service.findUserById(id)).rejects.toThrow(
-        ErrorMessages.USER_NOT_FOUND,
-      );
+      await expect(() => service.findUserById(id)).rejects.toThrow(ErrorMessages.USER_NOT_FOUND);
     });
   });
 
   describe('delete user', () => {
     it('should delete user', async () => {
       const user = await userModel.create(userStub());
-      await service.deleteUser(user._id);
+      await service.deleteUser(user._id, user._id);
       const users = await userModel.find({});
       expect(users.length).toBe(0);
     });
     it('should throw error on invalid id', async () => {
       await userModel.create(userStub());
-      await expect(() => service.deleteUser('123')).toThrow(
+      await expect(() => service.deleteUser('123', 'any')).toThrow(
         ErrorMessages.INVALID_ID,
       );
       const users = await userModel.find({});
@@ -111,8 +109,15 @@ describe('UsersService', () => {
     });
     it('should throw error if user is not found', async () => {
       const id = new Types.ObjectId();
-      await expect(() => service.deleteUser(id)).rejects.toThrow(
+      await expect(() => service.deleteUser(id, id)).rejects.toThrow(
         ErrorMessages.USER_NOT_FOUND,
+      );
+    });
+    it('should throw error if user is not the owner', async () => {
+      const id = new Types.ObjectId();
+      const { _id } = await userModel.create(userStub());
+      await expect(() => service.deleteUser(_id, id)).rejects.toThrow(
+        ErrorMessages.IDS_DONT_MATCH,
       );
     });
   });

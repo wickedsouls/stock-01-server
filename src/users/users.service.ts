@@ -2,12 +2,13 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersRepository } from './users.repository';
 import { ErrorMessages } from '../constants/errorMessages';
 import { ValidateMongoId } from '../decorators/validateMongoId';
-import { Types } from 'mongoose';
+import { MongoIdOrString } from '../common/interface';
 
 @Injectable()
 export class UsersService {
@@ -27,7 +28,7 @@ export class UsersService {
   }
 
   @ValidateMongoId()
-  async findUserById(id: Types.ObjectId | string) {
+  async findUserById(id: MongoIdOrString) {
     const user = await this.userRepo.findUserById(id);
     if (!user) {
       throw new NotFoundException(ErrorMessages.USER_NOT_FOUND);
@@ -36,7 +37,10 @@ export class UsersService {
   }
 
   @ValidateMongoId()
-  async deleteUser(id: Types.ObjectId | string) {
+  async deleteUser(id: MongoIdOrString, currentUserId: MongoIdOrString) {
+    if (!currentUserId || currentUserId !== id) {
+      throw new UnauthorizedException(ErrorMessages.IDS_DONT_MATCH);
+    }
     const user = await this.userRepo.findUserById(id);
     if (!user) {
       throw new NotFoundException(ErrorMessages.USER_NOT_FOUND);

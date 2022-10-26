@@ -2,8 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { AuthDto } from './dtos/auth.dto';
-import { UserRole } from '../constants/users';
 import { PasswordEncryptionService } from './password-encryption.service';
+import { plainToInstance } from 'class-transformer';
+import { UserDto } from '../users/dtos/user.dto';
+import { User } from '../schemas/user.schema';
+import { CreateUserDto } from '../users/dtos/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -23,25 +26,32 @@ export class AuthService {
     return user;
   }
 
+  createToken(user: User) {
+    const mappedUser = plainToInstance(UserDto, user, {
+      excludeExtraneousValues: true,
+    });
+    return this.jwtService.sign({ ...mappedUser });
+  }
+
   async login(authDto: AuthDto) {
-    const { name, password } = await this.validateUser(authDto);
+    const user = await this.validateUser(authDto);
+
     return {
-      access_token: this.jwtService.sign({ name, password }),
+      access_token: this.createToken(user),
     };
   }
 
-  async register(authDto: AuthDto) {
+  async register(createUserDto: CreateUserDto) {
     const hashedPassword = await this.passwordEncryptionService.hashPassword(
-      authDto.password,
+      createUserDto.password,
     );
     const user = await this.userService.createUser({
-      ...authDto,
+      ...createUserDto,
       password: hashedPassword,
-      role: UserRole.CUSTOMER,
     });
+
     return {
-      ...user,
-      access_token: this.jwtService.sign(user),
+      access_token: this.createToken(user),
     };
   }
 }

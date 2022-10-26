@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dtos/auth.dto';
 import { RegisterDto } from './dtos/register.dto';
 import { ResponseInterceptor } from '../interceptor/response.interceptor';
+import { CreateUserDto } from '../users/dtos/create-user.dto';
 
 @Controller('auth')
 @UseInterceptors(new ResponseInterceptor(RegisterDto))
@@ -15,7 +16,7 @@ export class AuthController {
   }
 
   @Post('/register')
-  register(@Body() authDto: AuthDto) {
-    return this.authService.register(authDto);
+  register(@Body() crateUserDto: CreateUserDto) {
+    return this.authService.register(crateUserDto);
   }
 }

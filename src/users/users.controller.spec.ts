@@ -31,14 +31,9 @@ describe('UsersController', () => {
   it('should call find user by name', async () => {
     const user = await controller.findUserByName(userStub().name);
     expect(user).toBeDefined();
-
   });
   it('should call delete user', async () => {
-    const id = await controller.deleteUser('123');
+    const id = await controller.deleteUser('123', '123');
     expect(id).toBe('123');
-  });
-  it('should call create user', async () => {
-    const user = await controller.createUser(userStub());
-    expect(user).toBeDefined();
   });
 });

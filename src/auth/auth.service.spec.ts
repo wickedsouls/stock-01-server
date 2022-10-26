@@ -6,7 +6,6 @@ import { User, UserSchema } from '../schemas/user.schema';
 import { JwtStrategy } from './jwt.strategy';
 import { PasswordEncryptionService } from './password-encryption.service';
 import { PassportModule } from '@nestjs/passport';
-import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { UsersRepository } from '../users/users.repository';
@@ -14,6 +13,8 @@ import { getModelToken } from '@nestjs/mongoose';
 import { authCredentialsStubs } from '../../test/stubs/auth.stubs';
 import { ErrorMessages } from '../constants/errorMessages';
 import * as bcrypt from 'bcrypt';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -68,9 +69,8 @@ describe('AuthService', () => {
 
   describe('register user', () => {
     it('should register new user', async () => {
-      const user = await service.register(authCredentialsStubs());
-      expect(user).toBeDefined();
-      expect(user.name).toBe(authCredentialsStubs().name);
+      const { access_token } = await service.register(authCredentialsStubs());
+      expect(access_token).toBeDefined();
     });
     it('should throw error when registering same user again', async () => {
       await userModel.create(authCredentialsStubs());
